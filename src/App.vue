@@ -4,22 +4,39 @@
       <div class="top-bar">
         <span>啦啦啦</span>
       </div>
-      <div class="content" id="content" ref="content"></div>
+      <div class="content"
+           id="content"
+           ref="content"></div>
       <div class="input-bar">
         <div class="from">
           <label>
-            <input name="from" type="radio" value="left" checked ref="left" />左边
+            <input name="from"
+                   type="radio"
+                   value="left"
+                   checked
+                   ref="left" />左边
           </label>
           <label>
-            <input name="from" type="radio" value="right" />右边
+            <input name="from"
+                   type="radio"
+                   value="right" />右边
           </label>
         </div>
         <div class="sendText">
-          <input type="text" v-model="message" />
+          <input type="text"
+                 v-model="message" />
           <button @click="sendText">发送文字</button>
         </div>
         <div class="sendImg">
-          <input type="file" accept="image/*" ref="img" @change="sendImg" />
+          <input type="file"
+                 accept="image/*"
+                 ref="img"
+                 @change="sendImg" />
+        </div>
+        <div class="sendSystemInfo">
+          <input type="text"
+                 v-model="systemInfo" />
+          <button @click="sendSystemInfo">发送系统提示</button>
         </div>
       </div>
     </div>
@@ -29,15 +46,18 @@
 <script>
 export default {
   name: "app",
-  data() {
+  data () {
     return {
       from: "right", //消息显示位置 left/right
       message: "",
       imgSrc: "",
+      systemInfo: '',
     };
   },
   methods: {
-    send(options) {
+
+    send (options) {
+
       //获取设置的from
       const radios = document.getElementsByName("from");
       this.from = Array.from(radios).find((i) => i.checked).value;
@@ -53,17 +73,30 @@ export default {
       this.moveToBottom();
     },
 
-    sendText() {
+    // 发送文字
+    sendText () {
       this.send({
         type: "theText",
         message: this.message,
       });
     },
 
+    // 发送系统信息
+    sendSystemInfo () {
+      this.send({
+        type: "theSystemInfo",
+        systemInfo: this.systemInfo,
+      });
+    },
+
     //将文件转为base64，传入theImg组件呢
-    sendImg() {
+    sendImg () {
       const img = this.$refs.img.files[0],
         previewImg = document.querySelector("img");
+
+      // 清空value,防止选择相同图片无法触发onchange事件
+      this.$refs.img.value = null
+
       const fr = new FileReader();
       fr.onload = (re) => {
         this.imgSrc = re.target.result;
@@ -76,7 +109,7 @@ export default {
     },
 
     //移动聊天框至最底部
-    moveToBottom() {
+    moveToBottom () {
       this.$refs.content.scrollTop = 99999;
     },
   },
@@ -113,6 +146,7 @@ a {
 }
 </style>
 <style lang="scss" scoped>
+@import "./common.scss";
 .message-content {
   margin: auto;
   width: 400px;
@@ -132,6 +166,7 @@ a {
     height: calc(100% - 171px);
     overflow-y: auto;
     overflow-x: hidden;
+    @include scrollbar;
   }
   .input-bar {
     height: 120px;

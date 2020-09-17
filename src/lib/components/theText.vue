@@ -1,5 +1,6 @@
 <template>
-  <div class="text-item" :class="from">
+  <div class="text-item"
+       :class="from">
     <div class="text-box">
       <span>{{message}}</span>
     </div>
@@ -9,8 +10,8 @@
 <script>
 export default {
   name: "theText",
-  created() {},
-  data() {
+  created () { },
+  data () {
     return {
       message: "",
       from: "left",
@@ -19,13 +20,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.left {
-  text-align: left;
-}
-.right {
-  text-align: right;
-}
+@import "../../common.scss";
 .text-item {
+@include from;
   margin: 15px 10px;
   .text-box {
     display: inline-block;
